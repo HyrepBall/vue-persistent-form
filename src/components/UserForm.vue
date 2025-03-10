@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
-import { Button, InputText, Message, Select, Password, Textarea } from 'primevue'
+import { Button, InputText, Message, Select, Password, Textarea, useToast } from 'primevue'
 import { useForm, useFieldArray, type Path } from 'vee-validate'
 import * as yup from 'yup'
 import { AccountType, useAccountStore } from '@/stores/accountStore'
@@ -11,6 +11,7 @@ const accountTypeOptions = Object.entries(AccountType).map(([key, value]) => ({
 }))
 
 const store = useAccountStore()
+const toast = useToast()
 
 onMounted(() => {
   console.log('Loaded accounts:', store.accounts)
@@ -127,6 +128,10 @@ const saveOnChange = async () => {
     }))
     store.saveAccounts(accountsToSave)
     console.log('Accounts saved:', store.accounts)
+    toast.add({
+      severity: 'success',
+      summary: 'Сохранено',
+    })
   } else {
     console.log('Validation failed:', errors)
   }
